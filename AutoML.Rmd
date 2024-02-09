@@ -42,6 +42,7 @@ pacman::p_load(
       , lubridate
       , AmesHousing
       , tidymodels
+      , scatterplot3d
       )
 ```
 
@@ -328,45 +329,59 @@ You will use the framework of tidymodel workflow, which will run these transform
 
 Since you've worked on it in MA679 please copy and paste your best model here.  
 ```{r,echo=TRUE}
-##
-##
+glm_fit <- lm(SalePrice ~ `Gr Liv Area`+ `Total Bsmt SF`, data = ames_raw)
+summary(glm_fit)
+
+scatterplot3d(ames_raw$`Gr Liv Area`, ames_raw$`Total Bsmt SF`, ames_raw$SalePrice,
+              main="3D plot: SalePrice vs Gr Liv Area and Total Bsmt SF",
+              xlab="Gr Liv Area", ylab="Total Bsmt SF", zlab="SalePrice",
+              color="blue", pch=20)
 ```
 
 Your answer:
 
 ~~~
-Please write your answer in full sentences.
+I choose two parameters.
 
 
 ~~~
 
 Please perform feature engineering on the Ames housing data that you think will help with the prediction.
 
-```{r,echo=TRUE}
-##
-##
+```{r,echo=TRUE, warning=FALSE}
+plot(ames_raw$`Gr Liv Area`,ames_raw$`Total Bsmt SF`)
+
+p=ggplot(ames_raw)+geom_point()+aes(x=`Total Bsmt SF`,y=SalePrice)+xlab("Above grade (ground) living area square feet")+ylab("Sale Price")+geom_smooth(method="lm",se=FALSE)
+p2 <- ggMarginal(p, margins = 'both', fill="skyblue", size=4,type="histogram")
+
+
+p4=ggplot(ames_raw)+geom_point()+aes(x=`Total Bsmt SF`,y=SalePrice)+xlab("Above grade (ground) living area square feet")+ylab("Sale Price")+geom_smooth(method="lm",se=FALSE)+scale_y_log10()+scale_x_log10()
+p3 <- ggMarginal(p4, margins = 'both', fill="skyblue", size=4,type="histogram")
+
+gridExtra::grid.arrange(p2,p3,ncol=2)
+
+ggplot(ames_raw)+geom_histogram()+aes(x=`Overall Qual`)
+
+ames_raw$OverallQual1 <- ifelse( ames_raw$`Overall Qual` >5, 3, ifelse( ames_raw$`Overall Qual`<5, 1, 2))
+ggplot(ames_raw)+geom_histogram()+aes(x=OverallQual1)
 ```
 
 Your answer:
 
 ~~~
-Please write your answer in full sentences.
+I still confused about the feture engineering
 
 
 ~~~
 
 Compare the result before and after the feature engineering step.
 
-```{r,echo=TRUE}
-##
-##
-```
 
 
 Your answer:
 
 ~~~
-Please write your answer in full sentences.
+I don't know how to compare, I am confuesd about it. How to compare? Since we choose our own parameters, so how to compare
 
 
 ~~~
